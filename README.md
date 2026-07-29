@@ -19,6 +19,7 @@ The demo follows this retrieval-augmented generation flow:
 
 ```mermaid
 sequenceDiagram
+    participant User
     participant Demo as Demo Script
     participant Pipeline as RAG Pipeline
     participant Retrieval as Retrieval Module
@@ -27,7 +28,9 @@ sequenceDiagram
     participant LLMClient as LLM Client
     participant OpenAI as OpenAI API
 
-    Demo->>Pipeline: rag(query)
+    User->>Demo: Enter question or press Enter
+    Demo->>Demo: Use entered or sample question
+    Demo->>Pipeline: rag(question)
     Pipeline->>Retrieval: retrieve(query, documents, doc_embeddings, k=3)
     Retrieval->>Embeddings: embed(query)
     Embeddings->>OpenAI: Create query embedding
@@ -64,10 +67,22 @@ This project uses Python 3.13+ and the package manager uv.
 
 ## Running the demo
 
-Run the sample RAG workflow from the project root:
+Run the RAG workflow from the project root:
 
 ```bash
-uv run python scripts/run.py
+uv run python main.py
 ```
 
-This will execute a sample financial research query and print the generated answer along with the total runtime.
+The demo shows the sample question and lets you enter a financial research question of your
+own, or press Enter to use the sample. It prints retrieval debugging information, the generated
+answer, and total runtime.
+
+## Running tests
+
+Run the offline test suite from the project root:
+
+```bash
+uv run pytest
+```
+
+The tests use deterministic local vectors and do not call the OpenAI API.

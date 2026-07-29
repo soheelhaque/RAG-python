@@ -8,7 +8,17 @@ from src.prompt_builder import build_prompt
 from src.retrieval import retrieve
 from src.types import RAGResponse
 
-doc_embeddings: list[NDArray[np.float64]] = [embed(doc) for doc in documents]
+doc_embeddings: list[NDArray[np.float64]] | None = None
+
+
+def get_document_embeddings() -> list[NDArray[np.float64]]:
+    """Create and cache corpus embeddings when the pipeline first runs."""
+    global doc_embeddings
+
+    if doc_embeddings is None:
+        doc_embeddings = [embed(doc) for doc in documents]
+
+    return doc_embeddings
 
 
 def rag(query: str) -> RAGResponse:
@@ -22,7 +32,7 @@ def rag(query: str) -> RAGResponse:
             generated prompt, and language-model answer.
     """
 
-    retrieved = retrieve(query, documents, doc_embeddings, k=3)
+    retrieved = retrieve(query, documents, get_document_embeddings(), k=3)
 
     # optional debug print (VERY useful for learning)
     print("\n--- RETRIEVAL DEBUG ---")
@@ -36,9 +46,4 @@ def rag(query: str) -> RAGResponse:
     prompt = build_prompt(query, retrieved)
     answer = call_llm(prompt)
 
-    return {
-        "query": query,
-        "retrieved_docs": retrieved,
-        "prompt": prompt,
-        "answer": answer
-    }
+    return {"query": query, "retrieved_docs": retrieved, "prompt": prompt, "answer": answer}
