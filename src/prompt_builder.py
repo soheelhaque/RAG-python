@@ -1,4 +1,21 @@
-def build_prompt(query, retrieved_docs):
+from collections.abc import Sequence
+
+from src.types import RetrievedDocument
+
+
+def build_prompt(query: str, retrieved_docs: Sequence[RetrievedDocument]) -> str:
+    """Build the language-model prompt from a query and retrieved documents.
+
+    Args:
+        query (str): The user's financial research question.
+        retrieved_docs (Sequence[RetrievedDocument]): Ranked documents and
+            their retrieval metadata.
+
+    Returns:
+        str: A formatted prompt containing the context and response
+            instructions.
+    """
+
     context = "\n\n".join(
         [
             f"""Document:

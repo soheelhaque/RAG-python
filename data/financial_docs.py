@@ -1,4 +1,6 @@
-documents = [
+"""Synthetic financial documents used by the demonstration pipeline."""
+
+documents: list[str] = [
     """
     US Equity Markets Outlook
 

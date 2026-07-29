@@ -3,7 +3,12 @@ from time import time
 from src.rag_pipeline import rag
 
 
-def main():
+def main() -> None:
+    """Run the sample financial question through the RAG pipeline.
+
+    Returns:
+        None: This function prints the generated answer and latency.
+    """
 
     query = (
         "What are the key risks for US tech equities "
