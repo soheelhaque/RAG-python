@@ -13,6 +13,38 @@ The project shows how the application:
 
 This is intended as a baseline for learning and comparison with other RAG frameworks.
 
+## RAG sequence
+
+The demo follows this retrieval-augmented generation flow:
+
+```mermaid
+sequenceDiagram
+    participant Demo as Demo Script
+    participant Pipeline as RAG Pipeline
+    participant Retrieval as Retrieval Module
+    participant Embeddings as Embeddings Module
+    participant Prompt as Prompt Builder
+    participant LLMClient as LLM Client
+    participant OpenAI as OpenAI API
+
+    Demo->>Pipeline: rag(query)
+    Pipeline->>Retrieval: retrieve(query, documents, doc_embeddings, k=3)
+    Retrieval->>Embeddings: embed(query)
+    Embeddings->>OpenAI: Create query embedding
+    OpenAI-->>Embeddings: Return query vector
+    Embeddings-->>Retrieval: Return query vector
+    Retrieval->>Retrieval: Calculate similarity and rank documents
+    Retrieval-->>Pipeline: Return top 3 retrieved documents
+    Pipeline->>Prompt: build_prompt(query, retrieved)
+    Prompt-->>Pipeline: Return prompt
+    Pipeline->>LLMClient: call_llm(prompt)
+    LLMClient->>OpenAI: Create chat completion
+    OpenAI-->>LLMClient: Return generated answer
+    LLMClient-->>Pipeline: Return answer
+    Pipeline-->>Demo: Return RAG response
+    Demo->>Demo: Print answer and latency
+```
+
 ## Installation
 
 This project uses Python 3.13+ and the package manager uv.
