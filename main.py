@@ -1,11 +1,13 @@
+from scripts.run_demo import main as run_demo
+
+
 def main() -> None:
-    """Print a short greeting when the project entry point is executed.
+    """Run the interactive RAG demonstration.
 
     Returns:
-        None: This function only writes the greeting to standard output.
+        None: This function delegates to the interactive demo.
     """
-
-    print("Hello from rag-python!")
+    run_demo()
 
 
 if __name__ == "__main__":

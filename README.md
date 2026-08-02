@@ -28,6 +28,7 @@ sequenceDiagram
     participant LLMClient as LLM Client
     participant OpenAI as OpenAI API
 
+    User->>Demo: Select a document corpus
     User->>Demo: Enter question or press Enter
     Demo->>Demo: Use entered or sample question
     Demo->>Pipeline: rag(question)
@@ -73,9 +74,10 @@ Run the RAG workflow from the project root:
 uv run python main.py
 ```
 
-The demo shows the sample question and lets you enter a financial research question of your
-own, or press Enter to use the sample. It prints retrieval debugging information, the generated
-answer, and total runtime.
+The demo first asks you to select a document source by number: the short in-code corpus or the
+text files in `data/financial_docs`. It then shows the sample question and lets you enter a
+financial research question of your own, or press Enter to use the sample. It prints retrieval
+debugging information, the generated answer, and total runtime.
 
 ## Running tests
 
