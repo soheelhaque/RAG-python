@@ -3,7 +3,7 @@ from time import time
 from src.rag_pipeline import rag
 
 SAMPLE_QUESTION = (
-    "What are the key risks for US tech equities given interest rates and AI growth trends?"
+    '\"What are the key risks for US tech equities given interest rates and AI growth trends?\"'
 )
 
 

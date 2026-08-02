@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 
-from data.financial_docs import documents
+from data.financial_docs_short import documents
 from src.embeddings import embed
 from src.llm_client import call_llm
 from src.prompt_builder import build_prompt
