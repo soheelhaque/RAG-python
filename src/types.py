@@ -8,7 +8,6 @@ class RetrievedDocument(TypedDict):
 
     score: float
     document: str
-    explanation: str | None
 
 
 class RAGResponse(TypedDict):

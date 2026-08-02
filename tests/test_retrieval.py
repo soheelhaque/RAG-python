@@ -27,13 +27,3 @@ def test_retrieve_ranks_the_closest_document_first(monkeypatch: object) -> None:
 
     assert results[0]["document"] == "Interest rates affect equity valuations."
     assert results[0]["score"] > results[1]["score"]
-    assert "interest" in results[0]["explanation"]
-
-
-def test_explain_match_reports_absent_keyword_overlap() -> None:
-    """Explain semantic-only matches when no literal query term is shared."""
-    explanation = retrieval.explain_match("rates", "AI investment", 0.9)
-
-    assert explanation == (
-        "very strong semantic match. No direct keyword overlap (semantic match only)"
-    )

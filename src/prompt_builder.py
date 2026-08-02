@@ -22,7 +22,6 @@ def build_prompt(query: str, retrieved_docs: Sequence[RetrievedDocument]) -> str
 {r['document']}
 
 Relevance score: {r['score']:.3f}
-Retrieval explanation: {r['explanation']}
 """
             for r in retrieved_docs
         ]

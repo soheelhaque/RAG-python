@@ -24,49 +24,13 @@ def cosine_similarity(
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 
-def explain_match(query: str, doc: str, score: float) -> str:
-    """Explain a document match using a deterministic heuristic.
-
-    Args:
-        query (str): The user's query.
-        doc (str): The document being evaluated.
-        score (float): The document's cosine-similarity score.
-
-    Returns:
-        str: A human-readable description of semantic strength and keyword
-            overlap.
-    """
-
-    if score > 0.85:
-        strength = "very strong semantic match"
-    elif score > 0.75:
-        strength = "strong semantic match"
-    elif score > 0.65:
-        strength = "moderate semantic match"
-    else:
-        strength = "weak semantic similarity"
-
-    # crude keyword overlap signal (optional but useful for intuition)
-    query_terms = set(query.lower().split())
-    doc_terms = set(doc.lower().split())
-    overlap = query_terms.intersection(doc_terms)
-
-    overlap_text = (
-        f"Keyword overlap detected: {', '.join(list(overlap)[:5])}"
-        if overlap else
-        "No direct keyword overlap (semantic match only)"
-    )
-
-    return f"{strength}. {overlap_text}"
-
-
 def retrieve(
     query: str,
     documents: Sequence[str],
     doc_embeddings: Sequence[NDArray[np.float64]],
     k: int = 3,
 ) -> list[RetrievedDocument]:
-    """Rank documents by semantic similarity and explain each result.
+    """Rank documents by semantic similarity.
 
     Args:
         query (str): The user's query to embed and compare against the
@@ -78,8 +42,7 @@ def retrieve(
         k (int): The maximum number of top-ranked results to return.
 
     Returns:
-        list[RetrievedDocument]: Up to ``k`` ranked documents with scores and
-            match explanations.
+        list[RetrievedDocument]: Up to ``k`` ranked documents with scores.
     """
 
     query_emb = embed(query)
@@ -92,14 +55,9 @@ def retrieve(
         scored_results.append({
             "score": float(score),
             "document": documents[i],
-            "explanation": None  # filled after sorting
         })
 
     # sort by score descending
     scored_results.sort(key=lambda x: x["score"], reverse=True)
-
-    # add explanations after ranking
-    for r in scored_results:
-        r["explanation"] = explain_match(query, r["document"], r["score"])
 
     return scored_results[:k]

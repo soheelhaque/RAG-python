@@ -5,22 +5,29 @@ from src.ingestion import load_documents
 from src.rag_pipeline import rag
 
 SAMPLE_QUESTION = (
-    '\"What are the key risks for US tech equities given interest rates and AI growth trends?\"'
+    "What are the key risks for US tech equities given interest rates and AI growth trends?"
+)
+FINANCIAL_DOCS_QUESTION = (
+    "How can delayed power connections and slower-than-expected AI workload utilisation affect"
+    " a cloud provider's cash flow, depreciation, and valuation?"
 )
 
 
-def get_question() -> str:
-    """Prompt for a research question and fall back to the sample question."""
+def get_question(document_source: str) -> str:
+    """Prompt for a research question with a source-specific sample fallback."""
+    sample_question = (
+        SAMPLE_QUESTION if document_source == "1" else FINANCIAL_DOCS_QUESTION
+    )
     question = input(
         "Enter a financial research question, or press Enter to use the sample question:\n"
-        f"{SAMPLE_QUESTION}\n\n"
+        f"{sample_question}\n\n"
         "Question: "
     ).strip()
-    return question or SAMPLE_QUESTION
+    return question or sample_question
 
 
-def get_documents() -> list[str]:
-    """Prompt until the user chooses one of the available document corpora."""
+def get_documents() -> tuple[list[str], str]:
+    """Prompt until the user chooses a document corpus and return its source."""
     while True:
         selection = input(
             "Choose a document source:\n"
@@ -30,9 +37,9 @@ def get_documents() -> list[str]:
         ).strip()
 
         if selection == "1":
-            return short_documents
+            return short_documents, selection
         if selection == "2":
-            return load_documents()
+            return load_documents(), selection
 
         print("Invalid selection. Enter 1 or 2.")
 
@@ -44,8 +51,8 @@ def main() -> None:
         None: This function prints the generated answer and latency.
     """
 
-    documents = get_documents()
-    query = get_question()
+    documents, document_source = get_documents()
+    query = get_question(document_source)
 
     start = time()
 

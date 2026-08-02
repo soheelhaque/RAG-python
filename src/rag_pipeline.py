@@ -39,7 +39,6 @@ def rag(query: str, documents: list[str]) -> RAGResponse:
     for i, r in enumerate(retrieved, 1):
         print(f"\nRank {i}")
         print(f"Score: {r['score']:.4f}")
-        print(f"Explanation: {r['explanation']}")
         print(f"Doc: {r['document'][:120]}...")
     print("\n")
 
