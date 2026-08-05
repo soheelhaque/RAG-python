@@ -5,6 +5,8 @@ from openai import OpenAI
 
 load_dotenv()
 
+LLM_MODEL = "gpt-4o-mini"
+
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
@@ -21,7 +23,7 @@ def call_llm(prompt: str) -> str | None:
     """
 
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=LLM_MODEL,
         messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content
